@@ -1,0 +1,39 @@
+{
+    "name": "ronnie/framewire",
+    "description": "An open source PHP learning framework",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vicent Simon",
+            "email": "vicsimon.vs4@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Framewire\\": "src/"
+        }
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^v6.3.8"
+    },
+    "require": {
+        "php": "^8.1",
+        "symfony/http-kernel": "^v6.3.8",
+        "league/event": "^3.0.2",
+        "symfony/http-foundation": "^v6.3.8",
+        "vlucas/valitron": "^v1.4.11",
+        "vlucas/phpdotenv": "^v5.6.0",
+        "league/container": "^4.2",
+        "illuminate/support": "^10.32",
+        "php-http/discovery": "^1.19",
+        "league/config": "^1.2",
+        "inspector-apm/inspector-php": "^3.7"
+    },
+    "suggest": {},
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}
