@@ -1,2 +1,6 @@
 # Package files
 /vendor
+
+# IDE Files
+/.idea
+/.vscode
