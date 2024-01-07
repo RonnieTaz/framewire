@@ -4,3 +4,6 @@
 # IDE Files
 /.idea
 /.vscode
+
+# Storage
+/storage

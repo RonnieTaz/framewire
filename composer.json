@@ -11,16 +11,19 @@
     ],
     "autoload": {
         "psr-4": {
-            "Framewire\\": "src/"
-        }
+            "Framewire\\": "src/",
+            "App\\": "app/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "require-dev": {
         "symfony/var-dumper": "^v6.3.8"
     },
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "symfony/http-kernel": "^v6.3.8",
-        "league/event": "^3.0.2",
         "symfony/http-foundation": "^v6.3.8",
         "vlucas/valitron": "^v1.4.11",
         "vlucas/phpdotenv": "^v5.6.0",
@@ -28,7 +31,14 @@
         "illuminate/support": "^10.32",
         "php-http/discovery": "^1.19",
         "league/config": "^1.2",
-        "inspector-apm/inspector-php": "^3.7"
+        "inspector-apm/inspector-php": "^3.7",
+        "symfony/routing": "^7.0",
+        "aura/router": "^3.3",
+        "symfony/psr-http-message-bridge": "^7.0",
+        "nyholm/psr7": "^1.8",
+        "roave/better-reflection": "^6.20",
+        "crell/tukio": "^1.6",
+        "monolog/monolog": "^3.5"
     },
     "suggest": {},
     "config": {
