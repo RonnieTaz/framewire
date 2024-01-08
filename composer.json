@@ -38,7 +38,9 @@
         "nyholm/psr7": "^1.8",
         "roave/better-reflection": "^6.20",
         "crell/tukio": "^1.6",
-        "monolog/monolog": "^3.5"
+        "monolog/monolog": "^3.5",
+        "league/flysystem": "^3.0",
+        "latte/latte": "^3.0"
     },
     "suggest": {},
     "config": {

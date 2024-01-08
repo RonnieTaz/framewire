@@ -8,15 +8,19 @@ use Aura\Router\RouterContainer;
 use Crell\Tukio\ProviderBuilder;
 use Crell\Tukio\ProviderCompiler;
 use Exception;
+use Framewire\Contracts\Event\EventListenerInterface;
 use Framewire\Enum\ApplicationMode;
 use Framewire\Foundation\Events\EventProvider;
-use Framewire\Foundation\Events\Listeners\RouteListener;
+use Framewire\Foundation\Events\Listeners\Http\ExceptionListener;
+use Framewire\Foundation\Events\Listeners\Http\RouteListener;
+use Framewire\Providers\EventServiceProvider;
 use League\Container\ContainerAwareInterface;
 use League\Container\ContainerAwareTrait;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
 
@@ -24,6 +28,10 @@ class App implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function bootstrap(): static
     {
         $this->loadEventListeners(find_classes(__DIR__ . '/Events/Listeners'));
@@ -39,7 +47,12 @@ class App implements ContainerAwareInterface
         return $this;
     }
 
-    public function registerEvents()
+    /**
+     * This method is used in the EventServiceProvider to register the Event Provider
+     * @see EventServiceProvider::register()
+     * @return EventProvider
+     */
+    public function registerEvents(): EventProvider
     {
         $this->compileEvents();
 
@@ -79,6 +92,7 @@ class App implements ContainerAwareInterface
         $builder = new ProviderBuilder();
 
         $builder->addListenerService(RouteListener::class, 'handle', RequestEvent::class);
+        $builder->addListenerService(ExceptionListener::class, 'handle', ExceptionEvent::class, 32);
 
         $compiler = new ProviderCompiler();
 
@@ -92,7 +106,7 @@ class App implements ContainerAwareInterface
     private function loadEventListeners(array $listeners): void
     {
         array_walk($listeners, function (ReflectionClass $class) {
-            if (is_subclass_of($class->getName(), ContainerAwareInterface::class)) {
+            if (is_subclass_of($class->getName(), EventListenerInterface::class)) {
                 $this->getContainer()->add($class->getName());
             }
         });

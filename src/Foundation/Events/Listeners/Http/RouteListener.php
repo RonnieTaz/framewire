@@ -1,32 +1,36 @@
 <?php
 
-namespace Framewire\Foundation\Events\Listeners;
+declare(strict_types=1);
+
+namespace Framewire\Foundation\Events\Listeners\Http;
 
 use Aura\Router\Matcher;
 use Aura\Router\RouterContainer;
 use Aura\Router\Rule\Accepts;
 use Aura\Router\Rule\Allows;
+use Framewire\Contracts\Event\EventListenerInterface;
 use League\Container\ContainerAwareInterface;
 use League\Container\ContainerAwareTrait;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\EventDispatcher\StoppableEventInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class RouteListener implements ContainerAwareInterface
+class RouteListener implements ContainerAwareInterface, EventListenerInterface
 {
     use ContainerAwareTrait;
 
     /**
-     * @param RequestEvent $event
+     * @param RequestEvent|StoppableEventInterface $event
      * @return void
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function handle(RequestEvent $event): void
+    public function handle(RequestEvent|StoppableEventInterface $event): void
     {
         $request = $event->getRequest();
 

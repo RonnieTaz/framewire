@@ -6,7 +6,6 @@ namespace Framewire\Providers;
 
 use Crell\Tukio\CompiledListenerProviderBase;
 use Crell\Tukio\Dispatcher;
-use Crell\Tukio\OrderedListenerProvider;
 use Framewire\Adapters\Event\EventDispatcherAdapter;
 use Framewire\Enum\Logger;
 use Framewire\Foundation\App;
