@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Symfony\Component\HttpFoundation\Response;
+use App\Templates\HomeTemplate;
+use Framewire\Foundation\Views\Template;
 
 class IndexController extends Controller
 {
-    public function home(): Response
+    public function home(): Template
     {
-        return (new Response('Hello World'));
+        return new HomeTemplate();
     }
 }

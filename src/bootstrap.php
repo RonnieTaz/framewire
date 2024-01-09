@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Aura\Router\RouterContainer;
 use Dotenv\Dotenv;
 use Framewire\Foundation\App;
 use League\Container\Container;

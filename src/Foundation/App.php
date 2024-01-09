@@ -11,6 +11,7 @@ use Exception;
 use Framewire\Contracts\Event\EventListenerInterface;
 use Framewire\Enum\ApplicationMode;
 use Framewire\Foundation\Events\EventProvider;
+use Framewire\Foundation\Events\Listeners\Http\ControllerResponseListener;
 use Framewire\Foundation\Events\Listeners\Http\ExceptionListener;
 use Framewire\Foundation\Events\Listeners\Http\RouteListener;
 use Framewire\Providers\EventServiceProvider;
@@ -22,6 +23,7 @@ use Roave\BetterReflection\Reflection\ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
 
 class App implements ContainerAwareInterface
@@ -93,6 +95,7 @@ class App implements ContainerAwareInterface
 
         $builder->addListenerService(RouteListener::class, 'handle', RequestEvent::class);
         $builder->addListenerService(ExceptionListener::class, 'handle', ExceptionEvent::class, 32);
+        $builder->addListenerService(ControllerResponseListener::class, 'handle', ViewEvent::class, 30);
 
         $compiler = new ProviderCompiler();
 
