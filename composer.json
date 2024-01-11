@@ -19,7 +19,10 @@
         ]
     },
     "require-dev": {
-        "symfony/var-dumper": "^v6.3.8"
+        "symfony/var-dumper": "^v6.3.8",
+        "ext-sockets": "*",
+        "php-http/discovery": "^1.19",
+        "ext-fileinfo": "*"
     },
     "require": {
         "php": "^8.2",
@@ -29,7 +32,6 @@
         "vlucas/phpdotenv": "^v5.6.0",
         "league/container": "^4.2",
         "illuminate/support": "^10.32",
-        "php-http/discovery": "^1.19",
         "league/config": "^1.2",
         "inspector-apm/inspector-php": "^3.7",
         "symfony/routing": "^7.0",

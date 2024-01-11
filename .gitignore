@@ -1,5 +1,6 @@
 # Package files
 /vendor
+/node_modules
 
 # IDE Files
 /.idea
@@ -7,3 +8,6 @@
 
 # Storage
 /storage
+
+# Compiled Assets
+/public/dist
