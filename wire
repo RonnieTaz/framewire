@@ -1,4 +1,4 @@
-#! /usr/bin/
+#! /usr/bin/php
 
 <?php
 if ($argc < 2 || !is_numeric($argv[1])) {
