@@ -7,10 +7,13 @@ use Framewire\Foundation\App;
 use League\Container\Container;
 use League\Container\ContainerAwareInterface;
 use League\Container\ServiceProvider\ServiceProviderInterface;
+use Tracy\Debugger;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 Dotenv::createImmutable(dirname(__DIR__))->safeLoad();
+
+Debugger::enable();
 
 $container = new Container();
 
