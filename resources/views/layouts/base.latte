@@ -6,8 +6,17 @@
     <title>{block title}Framewire | PHP Framework{/block}</title>
     <link rel="stylesheet" href="/dist/index.css" />
 </head>
-<body class="bg-gray-200">
+<body id="app" class="bg-gray-200">
 {include '../components/navbar/base.latte'}
 {block content}{/block}
+<script type="module">
+    import RefreshRuntime from 'http://localhost:5173/@react-refresh'
+    RefreshRuntime.injectIntoGlobalHook(window)
+    window.$RefreshReg$ = () => {}
+    window.$RefreshSig$ = () => (type) => type
+    window.__vite_plugin_react_preamble_installed__ = true
+</script>
+<script type="module" src="http://localhost:5173/@vite/client"></script>
+<script type="module" src="http://localhost:5173/main.js"></script>
 </body>
 </html>

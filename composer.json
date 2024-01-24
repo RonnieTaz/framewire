@@ -41,7 +41,8 @@
         "league/flysystem": "^3.0",
         "latte/latte": "^3.0",
         "tracy/tracy": "^2.10",
-        "oscarotero/env": "^2.1"
+        "oscarotero/env": "^2.1",
+        "ronnie/framewire-inertia": "^0.2.0"
     },
     "suggest": {},
     "config": {

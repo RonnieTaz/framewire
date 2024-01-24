@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./resources/views/**/*.latte"],
+  content: ["./resources/views/**/*.{js,jsx,latte}"],
   theme: {
     extend: {},
   },
