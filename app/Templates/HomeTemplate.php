@@ -2,12 +2,12 @@
 
 namespace App\Templates;
 
-use Framewire\Foundation\Views\Template;
+use Framewire\Foundation\Views\InertiaTemplate;
 
-class HomeTemplate extends Template
+class HomeTemplate extends InertiaTemplate
 {
     public function __construct()
     {
-        parent::__construct('home.latte');
+        parent::__construct('Home');
     }
 }

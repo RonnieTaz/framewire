@@ -20,6 +20,8 @@ use League\Container\ContainerAwareTrait;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Roave\BetterReflection\Reflection\ReflectionClass;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -36,8 +38,12 @@ class App implements ContainerAwareInterface
      */
     public function bootstrap(): static
     {
-        $this->loadEventListeners(find_classes(__DIR__ . '/Events/Listeners'));
+        $this->loadEventListeners(find_classes(dirname(__FILE__) . '/Events/Listeners'));
         $this->loadControllers(find_classes(dirname(__DIR__, 2) . '/app/Http/Controllers'));
+        $this->loadCommands(find_classes(
+            dirname(__DIR__, 2) . '/app/Console/Commands',
+            dirname(__FILE__) . '/Console/Commands'
+        ));
 
         $routes = include dirname(__DIR__, 2) . '/routes/web.php';
 
@@ -85,7 +91,12 @@ class App implements ContainerAwareInterface
                 $kernel->terminate($request, $response);
                 break;
             case ApplicationMode::CLI:
-                throw new Exception('To be implemented');
+                /**
+                 * @var $kernel Application
+                 */
+                $kernel = $this->getContainer()->get(Application::class);
+
+                $kernel->run();
         }
     }
 
@@ -120,6 +131,15 @@ class App implements ContainerAwareInterface
         array_walk($controllers, function (ReflectionClass $class) {
             if ($class->getName() !== Controller::class && is_subclass_of($class->getName(), Controller::class)) {
                 $this->getContainer()->add($class->getName());
+            }
+        });
+    }
+
+    private function loadCommands(array $commands): void
+    {
+        array_walk($commands, function (ReflectionClass $class) {
+            if (is_subclass_of($class->getName(), Command::class)) {
+                $this->getContainer()->add($class->getName())->addTag('commands');
             }
         });
     }

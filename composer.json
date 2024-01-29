@@ -22,7 +22,8 @@
         "symfony/var-dumper": "^v6.3.8",
         "ext-sockets": "*",
         "php-http/discovery": "^1.19",
-        "ext-fileinfo": "*"
+        "ext-fileinfo": "*",
+        "nette/php-generator": "^4.1"
     },
     "require": {
         "php": "^8.2",
@@ -42,7 +43,11 @@
         "latte/latte": "^3.0",
         "tracy/tracy": "^2.10",
         "oscarotero/env": "^2.1",
-        "ronnie/framewire-inertia": "^0.2.0"
+        "ronnie/framewire-inertia": "^0.2.0",
+        "symfony/asset": "^7.0",
+        "cycle/orm": "^2.6",
+        "cycle/annotated": "^4.0",
+        "symfony/console": "^7.0"
     },
     "suggest": {},
     "config": {

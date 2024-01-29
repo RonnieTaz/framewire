@@ -1,100 +1,33 @@
-#! /usr/bin/php
-
 <?php
-if ($argc < 2 || !is_numeric($argv[1])) {
-    echo "Usage: php wire <port>\n";
-    exit(1);
-}
 
-$port = intval($argv[1] ?? '8080');
-$directory = __DIR__ . '/public';
+use Dotenv\Dotenv;
+use Framewire\Enum\ApplicationMode;
+use Framewire\Foundation\App;
+use League\Container\Container;
+use League\Container\ContainerAwareInterface;
+use League\Container\ServiceProvider\ServiceProviderInterface;
 
-if (!($socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP))) {
-    die('Error creating socket');
-}
+require_once dirname(__FILE__) . '/vendor/autoload.php';
 
-if (!socket_bind($socket, '127.0.0.1', $port)) {
-    die('Error binding socket to address and port');
-}
+Dotenv::createImmutable(dirname(__DIR__))->safeLoad();
 
-if (!socket_listen($socket)) {
-    die('Error listening on socket');
-}
+$container = new Container();
 
-echo "Server listening on port $port\n";
+$container->inflector(ContainerAwareInterface::class)
+    ->invokeMethod('setContainer', [$container]);
 
-while (true) {
-    if (!($client = socket_accept($socket))) {
-        die('Error accepting connection');
+foreach (find_classes(__DIR__ . '/src/Providers') as $class) {
+    /**
+     * @var $class \Roave\BetterReflection\Reflection\ReflectionClass
+     */
+    $instance = $class->getName();
+    $provider = new $instance;
+    if ($provider instanceof ServiceProviderInterface) {
+        $container->addServiceProvider($provider);
     }
-
-    $request = socket_read($client, 4096);
-
-    preg_match("/GET \/(\S*)/", $request, $matches);
-    $filename = $matches[1] ?? 'index.html';
-    $filePath = $directory . '/' . $filename;
-
-    if ($filename !== 'index.php' && file_exists($filePath) && is_file($filePath)) {
-        $mime = mime_content_type($filePath);
-        $response = "HTTP/1.1 200 OK\r\n";
-        $response .= "Content-Type: $mime\r\n\r\n";
-        $response .= file_get_contents($filePath);
-    } else {
-        $response = handleRequestWithPHP($request);
-    }
-
-    socket_write($client, $response, strlen($response));
-    socket_close($client);
-
 }
 
-function handleRequestWithPHP($request): false|string
-{
-    $cmd = "php public/index.php";
-
-    $requestData = [
-        'GET' => $_GET,
-        'POST' => $_POST,
-        'COOKIE' => $_COOKIE,
-        'FILES' => $_FILES,
-        'SERVER' => $_SERVER,
-        'ENV' => $_ENV,
-    ];
-
-    // Build the query string with all superglobals
-    $queryString = http_build_query($requestData);
-
-    // Construct the correct command with parameters
-    if (!empty($queryString)) {
-        $cmd .= '?' . $queryString;
-    }
-
-    $descriptorspec = array(
-        0 => array("pipe", "r"),
-        1 => array("pipe", "w"),
-        2 => array("pipe", "w")
-    );
-
-    $process = proc_open($cmd, $descriptorspec, $pipes);
-
-    if (is_resource($process)) {
-        fwrite($pipes[0], $request);
-        fclose($pipes[0]);
-
-        $output = stream_get_contents($pipes[1]);
-        fclose($pipes[1]);
-
-        $error = stream_get_contents($pipes[2]);
-        fclose($pipes[2]);
-
-        proc_close($process);
-
-        if (!empty($error)) {
-            return "HTTP/1.1 500 Internal Server Error\r\n\r\n$error";
-        }
-
-        return $output;
-    }
-
-    return "HTTP/1.1 500 Internal Server Error\r\n\r\nFailed to execute PHP script";
-}
+/**
+ * @var $app App
+ */
+$container->get(App::class)->run(ApplicationMode::CLI);
