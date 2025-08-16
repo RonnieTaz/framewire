@@ -11,6 +11,7 @@ RUN sudo apt-get update && export DEBIAN_FRONTEND=noninteractive \
         libjpeg-dev \
         libfreetype6-dev \
         libicu-dev \
+        libpq-dev \
     && sudo apt-get clean \
     && sudo rm -rf /var/lib/apt/lists/*
 
@@ -29,9 +30,6 @@ RUN docker-php-ext-install \
 # Configure and install the GD extension for image manipulation.
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
-
-# Install Xdebug for debugging using PECL.
-RUN sudo pecl install xdebug && docker-php-ext-enable xdebug
 
 # Set the working directory for your project.
 WORKDIR /workspaces/${containerWorkspaceFolder}

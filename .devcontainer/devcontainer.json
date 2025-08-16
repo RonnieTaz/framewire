@@ -2,7 +2,7 @@
   "name": "PHP & PostgreSQL Dev Container",
 
   // Point to your Docker Compose file.
-  "dockerComposeFile": "docker-compose.yml",
+  "dockerComposeFile": "docker-compose.yaml",
 
   // Specify which service is the main development container.
   "service": "app",
