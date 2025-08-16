@@ -1,0 +1,63 @@
+{
+  "name": "PHP & PostgreSQL Dev Container",
+
+  // Point to your Docker Compose file.
+  "dockerComposeFile": "docker-compose.yml",
+
+  // Specify which service is the main development container.
+  "service": "app",
+
+  // The project folder will be mounted at this path inside the container.
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+  "customizations": {
+    // ----- VS Code Customizations -----
+    "vscode": {
+      "settings": {
+        "php.validate.executablePath": "/usr/local/bin/php"
+      },
+      "extensions": [
+        "bmewburn.vscode-intelephense-client",
+        "xdebug.php-debug",
+        "DEVSENSE.phptools-vscode",
+        "MehediDracula.php-namespace-resolver",
+        "ms-azuretools.vscode-docker"
+      ]
+    },
+
+    // ----- JetBrains PhpStorm Customizations -----
+    "jetbrains": {
+      "phpstorm": {
+        "settings": {
+          // Define the PHP interpreter inside the container
+          // This automatically configures PhpStorm to use it.
+          "php.interpreter.name": "devcontainer-php-8.4",
+          "php.interpreter.path": "/usr/local/bin/php",
+
+          // Map local project source code to the path inside the container
+          // This is crucial for Xdebug to work correctly.
+          "php.debug.path.mappings": [
+            {
+              "localPath": "$PROJECT_DIR$",
+              "remotePath": "/workspaces/${containerWorkspaceFolder}"
+            }
+          ],
+
+          // Point PhpStorm to the Composer executable in the container.
+          "composer.executable": "/usr/local/bin/composer"
+        },
+        // Recommend useful plugins for PhpStorm.
+        // Users will be prompted to install them if they are missing.
+        "plugins": [
+          "com.jetbrains.php",             // PHP Language Support (core)
+          "ru.adelf.idea.dotenv",          // .env file support
+          "de.espend.idea.php.annotation"  // PHP Annotations
+        ]
+      }
+    }
+  },
+
+  "forwardPorts": [8000],
+  "postCreateCommand": "composer install",
+  "remoteUser": "vscode"
+}

@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+    # This is your primary PHP application container.
+    app:
+        # It builds the image from your existing Dockerfile.
+        build:
+            context: .
+            dockerfile: Dockerfile
+
+        # Mounts your project directory into the container.
+        volumes:
+            - ..:/workspaces/${COMPOSE_PROJECT_NAME}:cached
+
+        # Environment variables for your PHP application to connect to the database.
+        # The DB_HOST 'db' matches the service name of our postgres container below.
+        environment:
+            - DB_HOST=db
+            - DB_PORT=5432
+            - DB_DATABASE=app_db
+            - DB_USERNAME=app_user
+            - DB_PASSWORD=secret
+
+        # Ensures the 'db' service starts before the 'app' service.
+        depends_on:
+            - db
+
+        # Keeps the container running after it's created.
+        command: sleep infinity
+
+    # This is the PostgreSQL database service.
+    db:
+        image: postgres:16-alpine
+        restart: unless-stopped
+
+        # Persists database data on your local machine in a Docker volume.
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+
+        # Environment variables to initialize the PostgreSQL database.
+        # These MUST match the ones used in the 'app' service.
+        environment:
+            - POSTGRES_DB=app_db
+            - POSTGRES_USER=app_user
+            - POSTGRES_PASSWORD=secret
+
+# Defines the named volume for data persistence.
+volumes:
+    postgres-data:
